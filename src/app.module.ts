@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { DataIngestionModule } from './data-ingestion/data-ingestion.module';
+import { IngestionModule } from './ingestion/ingestion.module';
 
 @Module({
-  imports: [DataIngestionModule],
+  imports: [IngestionModule],
   controllers: [],
   providers: [],
 })
