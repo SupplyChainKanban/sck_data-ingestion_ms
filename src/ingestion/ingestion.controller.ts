@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { IngestionService } from './ingestion.service';
 import { CreateDataSourceDto, UpdateDataSourceDto } from './dto';
 import { CreateRawDataDto } from './dto/create-raw-data.dto';
+import { PaginationDto } from 'src/common';
 
 @Controller('ingestion')
 export class IngestionController {
@@ -18,13 +19,13 @@ export class IngestionController {
   }
 
   @Get('data-source')
-  findAllDataSources() {
-    return this.ingestionService.findAllDataSources();
+  findAllDataSources(@Query() paginationDto: PaginationDto) {
+    return this.ingestionService.findAllDataSources(paginationDto);
   }
 
   @Get('raw-data')
-  findAllRawData() {
-    return this.ingestionService.findAllRawData();
+  findAllRawData(@Query() paginationDto: PaginationDto) {
+    return this.ingestionService.findAllRawData(paginationDto);
   }
 
 
@@ -32,7 +33,7 @@ export class IngestionController {
 
 
 
-  
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.ingestionService.findOne(+id);

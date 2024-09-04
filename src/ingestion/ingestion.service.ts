@@ -1,6 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { CreateDataSourceDto, CreateRawDataDto, UpdateDataSourceDto } from './dto';
 import { PrismaClient } from '@prisma/client';
+import { PaginationDto } from 'src/common';
 
 @Injectable()
 export class IngestionService extends PrismaClient implements OnModuleInit {
@@ -16,8 +17,6 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
     return this.dataSource.create({
       data: createDataSourceDto
     });
-
-    // return createDataSourceDto;
   }
 
   createRawData(createRawDataDto: CreateRawDataDto) {
@@ -26,12 +25,42 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
     })
   }
 
-  findAllDataSources() {
-    return `This action returns all data sources`;
+  async findAllDataSources(paginationDto: PaginationDto) {
+    const { page, limit } = paginationDto;
+    const totalRecords = await this.dataSource.count();
+    const lastPage = Math.ceil(totalRecords / limit)
+    const data = await this.dataSource.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+    })
+
+    return {
+      data,
+      meta: {
+        page,
+        totalRecords,
+        lastPage,
+      }
+    }
   }
 
-  findAllRawData() {
-    return `This action returns all raw data`;
+  async findAllRawData(paginationDto: PaginationDto) {
+    const { page, limit } = paginationDto;
+    const totalRecords = await this.rawData.count();
+    const lastPage = Math.ceil(totalRecords / limit)
+    const data = await this.rawData.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+    })
+
+    return {
+      data,
+      meta: {
+        page,
+        totalRecords,
+        lastPage
+      }
+    };
   }
 
 
