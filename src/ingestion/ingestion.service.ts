@@ -103,13 +103,25 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
     })
   }
 
+  async removeDataSource(id: number) {
+    await this.findOneDataSource(id);
 
+    return await this.dataSource.delete({
+      where: { id }
+    })
+  }
 
+  async removeRawData(id: number) {
+    await this.findOneRawData(id);
 
-
-
-
-  remove(id: number) {
-    return `This action removes a #${id} ingestion`;
+    return await this.rawData.delete({
+      where: { id }
+    })
   }
 }
+
+
+
+
+
+

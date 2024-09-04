@@ -37,23 +37,27 @@ export class IngestionController {
     return this.ingestionService.findOneRawData(+id);
   }
 
-  @Patch('/data-source/:id')
+  @Patch('data-source/:id')
   updateDataSource(@Param('id', ParseIntPipe) id: number, @Body() updateDataSourceDto: UpdateDataSourceDto) {
     return this.ingestionService.updateDataSource(id, updateDataSourceDto);
   }
 
-  @Patch('/raw-data/:id')
+  @Patch('raw-data/:id')
   updateRawData(@Param('id', ParseIntPipe) id: number, @Body() updateRawDataDto: UpdateRawDataDto) {
     return this.ingestionService.updateRawData(id, updateRawDataDto);
   }
 
-
-
-
-
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ingestionService.remove(+id);
+  @Delete('data-source/:id')
+  removeDataSource(@Param('id', ParseIntPipe) id: number) {
+    return this.ingestionService.removeDataSource(id);
   }
+
+  @Delete('raw-data/:id')
+  removeRawData(@Param('id', ParseIntPipe) id: number) {
+    return this.ingestionService.removeRawData(id);
+  }
+
+
+
+
 }
