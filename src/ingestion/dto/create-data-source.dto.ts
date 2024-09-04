@@ -1,8 +1,4 @@
-export class DataSource {
-
-
-    public id: string;
-
+export class CreateDataSourceDto {
 
     public name: string; // Nombre de la fuente
 
@@ -20,15 +16,6 @@ export class DataSource {
 
 
     public status: string; // Será un enum. Estado de la fuente (Activo, Inactivo)
-
-
-    public lastAccessed: Date; // Última vez que se accedió a la fuente
-
-
-    public createAt: Date;
-
-
-    public updatedAt: Date;
 
 
 }

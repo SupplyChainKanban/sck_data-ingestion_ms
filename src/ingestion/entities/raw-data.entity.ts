@@ -3,32 +3,32 @@ import { DataSource } from "./data-source.entity";
 export class RawData {
     
 
-    id: string;
+    public id: string;
 
 
-    source: DataSource;
+    public source: DataSource;
 
 
-    sourceType: string; //* Sería un enum (MES, MANUAL, PROYECTO)
+    public sourceType: string; //* Sería un enum (MES, MANUAL, PROYECTO)
 
 
-    dataSchemaVersion: string; //* Versión del esquema del dato crudo para trazabilidad
+    public dataSchemaVersion: string; //* Versión del esquema del dato crudo para trazabilidad
 
 
-    dataPayload: object;
+    public dataPayload: object;
 
 
-    ingestedBy: string; //* Usuario o sistema que ingresó el dato
+    public ingestedBy: string; //* Usuario o sistema que ingresó el dato
 
 
-    priority: string; //* Serán un enum (Alta, Media, Baja). Prioridad de procesamiento de datos
+    public priority: string; //* Serán un enum (Alta, Media, Baja). Prioridad de procesamiento de datos
 
 
-    timestamp: Date; //Fecha y hora de la entrada.
+    public timestamp: Date; //Fecha y hora de la entrada.
 
 
-    status: string; //* Será un enum (pending, processed, error)
+    public status: string; //* Será un enum (pending, processed, error)
 
 
-    errorMessage: string; //* Mensaje de error si existe
+    public errorMessage: string; //* Mensaje de error si existe
 }
