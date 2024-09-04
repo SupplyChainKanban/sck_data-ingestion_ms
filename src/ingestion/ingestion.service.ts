@@ -92,20 +92,28 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
   }
 
   async updateDataSource(id: number, updateDataSourceDto: UpdateDataSourceDto) {
+    //? Aquí se colocará el id solo para que funcione el TCP
+    const { id: __, ...data } = updateDataSourceDto;
+
     await this.findOneDataSource(id);
 
     return this.dataSource.update({
       where: { id: id },
-      data: updateDataSourceDto,
+      //? data: updateDataSourceDto,
+      data: data,
     })
   }
 
   async updateRawData(id: number, updateRawDataDto: UpdateRawDataDto) {
+    //? Aquí se colocará el id solo para que funcione el TCP
+    const { id: __, ...data } = updateRawDataDto;
+
     await this.findOneRawData(id);
 
     return this.rawData.update({
       where: { id: id },
-      data: updateRawDataDto,
+      //? data: updateRawDataDto,
+      data: data,
     })
   }
 
