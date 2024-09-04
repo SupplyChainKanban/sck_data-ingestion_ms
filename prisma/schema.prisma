@@ -18,9 +18,19 @@ model DataSource {
   name String
   description String
   sourceType String
-  connectionDetails String
+  // connectionDetails Unsupported("json")
   frequency String
   status String
+  lastAccessed DateTime @default(now())
+  createAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RawData {
+  id Int @id @default(autoincrement())
+  dataSchemaVersion String
+  ingestedBy String
+  priority String
   lastAccessed DateTime @default(now())
   createAt DateTime @default(now())
   updatedAt DateTime @updatedAt

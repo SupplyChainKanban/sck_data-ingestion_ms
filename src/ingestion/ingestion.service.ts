@@ -13,11 +13,17 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
   }
 
   createDataSource(createDataSourceDto: CreateDataSourceDto) {
-    return createDataSourceDto;
+    return this.dataSource.create({
+      data: createDataSourceDto
+    });
+
+    // return createDataSourceDto;
   }
 
   createRawData(createRawDataDto: CreateRawDataDto) {
-    return createRawDataDto;
+    return this.rawData.create({
+      data: createRawDataDto
+    })
   }
 
   findAllDataSources() {

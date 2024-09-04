@@ -6,17 +6,18 @@ export class CreateRawDataDto {
     // TODO: Crear una relación con el DataSource
     // public source: DataSource;
 
-    @IsObject()
-    @Transform(({ value }) => {
-        try {
-            return JSON.parse(value);
-        } catch (error) {
-            // TODO: Agregar un tipo de error de Nest
-            throw new Error('Invalid JSON format for connectionDetails')
-        }
-    })
-    @Type(() => Object)
-    public dataPayload: object;
+    // TODO: Añadir dataPayload
+    // @IsObject()
+    // @Transform(({ value }) => {
+    //     try {
+    //         return JSON.parse(value);
+    //     } catch (error) {
+    //         // TODO: Agregar un tipo de error de Nest
+    //         throw new Error('Invalid JSON format for connectionDetails')
+    //     }
+    // })
+    // @Type(() => Object)
+    // public dataPayload: object;
 
     @IsNotEmpty()
     @IsString()
