@@ -28,16 +28,20 @@ export class IngestionController {
     return this.ingestionService.findAllRawData(paginationDto);
   }
 
-
-
-
-
-
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ingestionService.findOne(+id);
+  @Get('data-source/:id')
+  findOneDataSource(@Param('id') id: string) {
+    return this.ingestionService.findOneDataSource(+id);
   }
+
+  @Get('raw-data/:id')
+  findOneRawData(@Param('id') id: string) {
+    return this.ingestionService.findOneRawData(+id);
+  }
+
+
+
+
+
 
   @Patch(':id')
   updateDataSource(@Param('id') id: string, @Body() updateDataSourceDto: UpdateDataSourceDto) {
