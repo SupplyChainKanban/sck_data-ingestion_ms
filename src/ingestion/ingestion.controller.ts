@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe } from '@nestjs/common';
 import { IngestionService } from './ingestion.service';
-import { CreateDataSourceDto, UpdateDataSourceDto } from './dto';
-import { CreateRawDataDto } from './dto/create-raw-data.dto';
+import { CreateDataSourceDto, CreateRawDataDto, UpdateDataSourceDto, UpdateRawDataDto } from './dto';
 import { PaginationDto } from 'src/common';
 
 @Controller('ingestion')
@@ -38,15 +37,20 @@ export class IngestionController {
     return this.ingestionService.findOneRawData(+id);
   }
 
-
-
-
-
-
-  @Patch(':id')
-  updateDataSource(@Param('id') id: string, @Body() updateDataSourceDto: UpdateDataSourceDto) {
-    return this.ingestionService.updateDataSource(+id, updateDataSourceDto);
+  @Patch('/data-source/:id')
+  updateDataSource(@Param('id', ParseIntPipe) id: number, @Body() updateDataSourceDto: UpdateDataSourceDto) {
+    return this.ingestionService.updateDataSource(id, updateDataSourceDto);
   }
+
+  @Patch('/raw-data/:id')
+  updateRawData(@Param('id', ParseIntPipe) id: number, @Body() updateRawDataDto: UpdateRawDataDto) {
+    return this.ingestionService.updateRawData(id, updateRawDataDto);
+  }
+
+
+
+
+
 
   @Delete(':id')
   remove(@Param('id') id: string) {

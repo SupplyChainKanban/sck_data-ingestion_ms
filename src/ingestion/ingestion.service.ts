@@ -1,5 +1,5 @@
 import { Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common';
-import { CreateDataSourceDto, CreateRawDataDto, UpdateDataSourceDto } from './dto';
+import { CreateDataSourceDto, CreateRawDataDto, UpdateDataSourceDto, UpdateRawDataDto } from './dto';
 import { PrismaClient } from '@prisma/client';
 import { PaginationDto } from 'src/common';
 
@@ -85,14 +85,29 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
     return rawData;
   }
 
+  async updateDataSource(id: number, updateDataSourceDto: UpdateDataSourceDto) {
+    await this.findOneDataSource(id);
 
-
-
-
-
-  updateDataSource(id: number, updateDataSourceDto: UpdateDataSourceDto) {
-    return `This action updates a #${id} ingestion`;
+    return this.dataSource.update({
+      where: { id: id },
+      data: updateDataSourceDto,
+    })
   }
+
+  async updateRawData(id: number, updateRawDataDto: UpdateRawDataDto) {
+    await this.findOneRawData(id);
+
+    return this.rawData.update({
+      where: { id: id },
+      data: updateRawDataDto,
+    })
+  }
+
+
+
+
+
+
 
   remove(id: number) {
     return `This action removes a #${id} ingestion`;
