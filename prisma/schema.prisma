@@ -21,9 +21,13 @@ model DataSource {
   // connectionDetails Unsupported("json")
   frequency String
   status String
+
+  available Boolean @default(true)
   lastAccessed DateTime @default(now())
   createAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([available])
 }
 
 model RawData {
@@ -31,7 +35,10 @@ model RawData {
   dataSchemaVersion String
   ingestedBy String
   priority String
+  available Boolean @default(true)
   lastAccessed DateTime @default(now())
   createAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([available])
 }

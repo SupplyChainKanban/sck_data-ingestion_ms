@@ -22,6 +22,9 @@ export class DataSource {
     public status: string; // Será un enum. Estado de la fuente (Activo, Inactivo)
 
 
+    public available: boolean;
+
+
     public lastAccessed: Date; // Última vez que se accedió a la fuente
 
 

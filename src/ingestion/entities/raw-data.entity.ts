@@ -27,6 +27,9 @@ export class RawData {
     public errorMessage: string; //* Mensaje de error si existe
 
 
+    public available: boolean;
+
+
     public lastAccessed: Date; // Última vez que se accedió a la fuente
 
 

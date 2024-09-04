@@ -27,11 +27,14 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
 
   async findAllDataSources(paginationDto: PaginationDto) {
     const { page, limit } = paginationDto;
-    const totalRecords = await this.dataSource.count();
+    const totalRecords = await this.dataSource.count({ where: { available: true } });
     const lastPage = Math.ceil(totalRecords / limit)
     const data = await this.dataSource.findMany({
       skip: (page - 1) * limit,
       take: limit,
+      where: {
+        available: true,
+      }
     })
 
     return {
@@ -46,11 +49,14 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
 
   async findAllRawData(paginationDto: PaginationDto) {
     const { page, limit } = paginationDto;
-    const totalRecords = await this.rawData.count();
+    const totalRecords = await this.rawData.count({ where: { available: true } });
     const lastPage = Math.ceil(totalRecords / limit)
     const data = await this.rawData.findMany({
       skip: (page - 1) * limit,
       take: limit,
+      where: {
+        available: true,
+      }
     })
 
     return {
@@ -65,7 +71,7 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
 
   async findOneDataSource(id: number) {
     const dataSource = await this.dataSource.findFirst({
-      where: { id: id }
+      where: { id: id, available: true }
     })
     if (!dataSource) {
       throw new NotFoundException(`Data Source with id #${id} not found`)
@@ -76,7 +82,7 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
 
   async findOneRawData(id: number) {
     const rawData = await this.rawData.findFirst({
-      where: { id: id }
+      where: { id: id, available: true }
     })
     if (!rawData) {
       throw new NotFoundException(`Raw Data with id #${id} not found`)
@@ -106,17 +112,27 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
   async removeDataSource(id: number) {
     await this.findOneDataSource(id);
 
-    return await this.dataSource.delete({
-      where: { id }
+    const dataSource = await this.dataSource.update({
+      where: { id },
+      data: {
+        available: false
+      }
     })
+
+    return dataSource;
   }
 
   async removeRawData(id: number) {
     await this.findOneRawData(id);
 
-    return await this.rawData.delete({
-      where: { id }
+    const rawData = await this.rawData.update({
+      where: { id },
+      data: {
+        available: false
+      }
     })
+
+    return rawData
   }
 }
 
