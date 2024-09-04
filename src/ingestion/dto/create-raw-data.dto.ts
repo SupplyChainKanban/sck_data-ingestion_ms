@@ -11,6 +11,7 @@ export class CreateRawDataDto {
         try {
             return JSON.parse(value);
         } catch (error) {
+            // TODO: Agregar un tipo de error de Nest
             throw new Error('Invalid JSON format for connectionDetails')
         }
     })
