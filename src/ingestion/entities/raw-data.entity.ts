@@ -9,13 +9,10 @@ export class RawData {
     public source: DataSource;
 
 
-    public sourceType: string; //* Sería un enum (MES, MANUAL, PROYECTO)
-
-
-    public dataSchemaVersion: string; //* Versión del esquema del dato crudo para trazabilidad
-
-
     public dataPayload: object;
+    
+    
+    public dataSchemaVersion: string; //* Versión del esquema del dato crudo para trazabilidad
 
 
     public ingestedBy: string; //* Usuario o sistema que ingresó el dato

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateDataSourceDto, UpdateDataSourceDto } from './dto';
+import { CreateDataSourceDto, CreateRawDataDto, UpdateDataSourceDto } from './dto';
 
 @Injectable()
 export class IngestionService {
@@ -7,9 +7,22 @@ export class IngestionService {
     return createDataSourceDto;
   }
 
-  findAll() {
-    return `This action returns all ingestion`;
+  createRawData(createRawDataDto: CreateRawDataDto) {
+    return createRawDataDto;
   }
+
+  findAllDataSources() {
+    return `This action returns all data sources`;
+  }
+
+  findAllRawData() {
+    return `This action returns all raw data`;
+  }
+
+
+
+
+  
 
   findOne(id: number) {
     return `This action returns a #${id} ingestion`;
