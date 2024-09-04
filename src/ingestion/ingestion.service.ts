@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateIngestionDto } from './dto/create-ingestion.dto';
-import { UpdateIngestionDto } from './dto/update-ingestion.dto';
+import { CreateDataSourceDto, UpdateDataSourceDto } from './dto';
 
 @Injectable()
 export class IngestionService {
-  create(createIngestionDto: CreateIngestionDto) {
-    return 'This action adds a new ingestion';
+  createDataSource(createDataSourceDto: CreateDataSourceDto) {
+    return createDataSourceDto;
   }
 
   findAll() {
@@ -16,7 +15,7 @@ export class IngestionService {
     return `This action returns a #${id} ingestion`;
   }
 
-  update(id: number, updateIngestionDto: UpdateIngestionDto) {
+  updateDataSource(id: number, updateDataSourceDto: UpdateDataSourceDto) {
     return `This action updates a #${id} ingestion`;
   }
 
