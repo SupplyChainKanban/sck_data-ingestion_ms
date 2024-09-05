@@ -1,7 +1,8 @@
-import { Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { CreateDataSourceDto, CreateRawDataDto, UpdateDataSourceDto, UpdateRawDataDto } from './dto';
 import { PrismaClient } from '@prisma/client';
 import { PaginationDto } from 'src/common';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class IngestionService extends PrismaClient implements OnModuleInit {
@@ -74,7 +75,7 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
       where: { id: id, available: true }
     })
     if (!dataSource) {
-      throw new NotFoundException(`Data Source with id #${id} not found`)
+      throw new RpcException(`Data Source with id #${id} not found`)
     }
 
     return dataSource;
@@ -85,7 +86,7 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
       where: { id: id, available: true }
     })
     if (!rawData) {
-      throw new NotFoundException(`Raw Data with id #${id} not found`)
+      throw new RpcException(`Raw Data with id #${id} not found`)
     }
 
     return rawData;
