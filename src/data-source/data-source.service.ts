@@ -3,6 +3,7 @@ import { RpcException } from '@nestjs/microservices';
 import { PrismaClient } from '@prisma/client';
 import { CreateDataSourceDto, UpdateDataSourceDto } from './dto';
 import { PaginationDto } from 'src/common';
+import { handleExceptions } from 'src/common/helpers/exceptions';
 
 @Injectable()
 export class DataSourceService extends PrismaClient implements OnModuleInit {
@@ -17,7 +18,7 @@ export class DataSourceService extends PrismaClient implements OnModuleInit {
     try {
       return await this.dataSource.create({ data: createDataSourceDto });
     } catch (error) {
-      this.handleExceptions(error);
+      handleExceptions(error, this.logger);
     }
   }
 
@@ -28,21 +29,31 @@ export class DataSourceService extends PrismaClient implements OnModuleInit {
       const totalRecords = await this.dataSource.count({ where: { available: true } });
       const lastPage = Math.ceil(totalRecords / limit)
       const data = await this.dataSource.findMany({
-        skip: (page - 1) * limit, take: limit, where: { available: true }
+        skip: (page - 1) * limit, take: limit, where: { available: true },
+        omit: {
+          createAt: true,
+          updatedAt: true,
+          lastAccessed: true,
+        }
       })
 
       return {
         data, meta: { page, totalRecords, lastPage }
       }
     } catch (error) {
-      this.handleExceptions(error);
+      handleExceptions(error, this.logger);
     }
   }
 
   async findOne(id: string) {
     try {
       const dataSource = await this.dataSource.findFirst({
-        where: { id: id, available: true }
+        where: { id: id, available: true },
+        omit: {
+          createAt: true,
+          updatedAt: true,
+          lastAccessed: true,
+        }
       })
       if (!dataSource) {
         throw new RpcException({
@@ -53,7 +64,7 @@ export class DataSourceService extends PrismaClient implements OnModuleInit {
 
       return dataSource;
     } catch (error) {
-      this.handleExceptions(error);
+      handleExceptions(error, this.logger);
     }
   }
 
@@ -67,7 +78,7 @@ export class DataSourceService extends PrismaClient implements OnModuleInit {
         data: data,
       })
     } catch (error) {
-      this.handleExceptions(error);
+      handleExceptions(error, this.logger);
     }
   }
 
@@ -78,17 +89,7 @@ export class DataSourceService extends PrismaClient implements OnModuleInit {
 
       return dataSource;
     } catch (error) {
-      this.handleExceptions(error);
+      handleExceptions(error, this.logger);
     }
-  }
-
-  private handleExceptions(error: any) {
-    if (error.message.includes('Unique constraint failed')) {
-      this.logger.error('DB Unique constrain is not satisfied')
-      throw new RpcException({ status: HttpStatus.CONFLICT, message: 'Conflicto con los datos enviados. Ya hay una entrada similar' });
-    }
-
-    this.logger.error(error);
-    throw new RpcException({ status: HttpStatus.BAD_REQUEST, message: error.message });
   }
 }

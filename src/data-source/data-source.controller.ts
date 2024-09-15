@@ -1,8 +1,7 @@
 import { Controller, ParseUUIDPipe } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { DataSourceService } from './data-source.service';
-import { CreateDataSourceDto } from './dto/create-data-source.dto';
-import { UpdateDataSourceDto } from './dto/update-data-source.dto';
+import { CreateDataSourceDto, UpdateDataSourceDto } from './dto/';
 import { PaginationDto } from 'src/common';
 
 @Controller()

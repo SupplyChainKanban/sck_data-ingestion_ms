@@ -1,10 +1,10 @@
 import { PartialType } from "@nestjs/mapped-types";
 import { CreateRawDataDto } from "./create-raw-data.dto";
-import { IsNumber, IsPositive } from "class-validator";
+import { IsNotEmpty, IsString, IsUUID } from "class-validator";
 
 export class UpdateRawDataDto extends PartialType(CreateRawDataDto) {
-  //? Aquí se colocará el id solo para que funcione el TCP
-  @IsNumber()
-  @IsPositive()
-  public id: number;
+  @IsNotEmpty()
+  @IsString()
+  @IsUUID()
+  public id: string;
 }
