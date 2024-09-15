@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { IngestionModule } from './ingestion/ingestion.module';
 import { DataSourceModule } from './data-source/data-source.module';
+import { RawDataModule } from './raw-data/raw-data.module';
 
 @Module({
-  imports: [IngestionModule, DataSourceModule],
+  imports: [DataSourceModule, RawDataModule],
   controllers: [],
   providers: [],
 })

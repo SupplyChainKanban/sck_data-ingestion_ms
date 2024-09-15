@@ -31,4 +31,4 @@ export class CreateRawDataDto {
 
     @IsEnum(['alta', 'media', 'baja'])
     public priority: string; //* Serán un enum (Alta, Media, Baja). Prioridad de procesamiento de datos
-}
+} export class CreateRawDatumDto { }

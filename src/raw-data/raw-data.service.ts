@@ -1,27 +1,26 @@
 import { HttpStatus, Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { CreateRawDataDto, UpdateRawDataDto } from './dto';
-import { PrismaClient } from '@prisma/client';
-import { PaginationDto } from 'src/common';
 import { RpcException } from '@nestjs/microservices';
+import { PrismaClient } from '@prisma/client';
+import { CreateRawDataDto, UpdateRawDataDto } from './dto';
+import { PaginationDto } from 'src/common';
 
 @Injectable()
-export class IngestionService extends PrismaClient implements OnModuleInit {
+export class RawDataService extends PrismaClient implements OnModuleInit {
 
   private readonly logger = new Logger('IngestionService');
 
   onModuleInit() {
     this.$connect();
-    this.logger.log('Database connected')
+    this.logger.log('RawData Database connected')
   }
 
-  createRawData(createRawDataDto: CreateRawDataDto) {
+  create(createRawDataDto: CreateRawDataDto) {
     return this.rawData.create({
       data: createRawDataDto
     })
   }
 
-
-  async findAllRawData(paginationDto: PaginationDto) {
+  async findAll(paginationDto: PaginationDto) {
     const { page, limit } = paginationDto;
     const totalRecords = await this.rawData.count({ where: { available: true } });
     const lastPage = Math.ceil(totalRecords / limit)
@@ -43,7 +42,7 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
     };
   }
 
-  async findOneRawData(id: number) {
+  async findOne(id: number) {
     const rawData = await this.rawData.findFirst({
       where: { id: id, available: true }
     })
@@ -57,11 +56,11 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
     return rawData;
   }
 
-  async updateRawData(id: number, updateRawDataDto: UpdateRawDataDto) {
+  async update(id: number, updateRawDataDto: UpdateRawDataDto) {
     //? Aquí se colocará el id solo para que funcione el TCP
     const { id: __, ...data } = updateRawDataDto;
 
-    await this.findOneRawData(id);
+    await this.findOne(id);
 
     return this.rawData.update({
       where: { id: id },
@@ -70,8 +69,8 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
     })
   }
 
-  async removeRawData(id: number) {
-    await this.findOneRawData(id);
+  async remove(id: number) {
+    await this.findOne(id);
 
     const rawData = await this.rawData.update({
       where: { id },
@@ -83,9 +82,3 @@ export class IngestionService extends PrismaClient implements OnModuleInit {
     return rawData
   }
 }
-
-
-
-
-
-

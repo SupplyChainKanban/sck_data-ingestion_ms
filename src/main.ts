@@ -5,7 +5,6 @@ import { envs } from './config/envs';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function main() {
-
   const logger = new Logger('Main')
 
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -27,7 +26,6 @@ async function main() {
   );
 
   await app.listen();
-  // await app.startAllMicriservices();
   logger.log(`Data ingestion Microservice running on port ${envs.port}`)
 }
 main();
