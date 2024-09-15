@@ -1,44 +1,73 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model DataSource {
-  id Int @id @default(autoincrement())
-  name String
-  description String
-  sourceType String
-  // connectionDetails Unsupported("json")
-  frequency String
-  status String
-
-  available Boolean @default(true)
-  lastAccessed DateTime @default(now())
-  createAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String              @id @default(uuid())
+  name              String
+  description       String
+  sourceType        DataSourceType
+  connectionDetails Json
+  frequency         DataSourceFrequency
+  status            DataSourceStatus    @default(ACTIVE)
+  available         Boolean             @default(true)
+  lastAccessed      DateTime            @default(now())
+  createAt          DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  rawData           RawData[]
 
   @@index([available])
+  @@unique([name, description, sourceType, frequency])
 }
 
 model RawData {
-  id Int @id @default(autoincrement())
+  id                String          @id @default(uuid())
   dataSchemaVersion String
-  ingestedBy String
-  priority String
-  available Boolean @default(true)
-  lastAccessed DateTime @default(now())
-  createAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  dataPayload       Json
+  ingestedBy        String
+  priority          RawDataPriority
+  status            RawDataStatus   @default(PENDING)
+  available         Boolean         @default(true)
+  lastAccessed      DateTime        @default(now())
+  createAt          DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  dataSource        DataSource      @relation(fields: [dataSourceId], references: [id])
+  dataSourceId      String
 
   @@index([available])
+  @@unique([dataSchemaVersion, dataPayload, ingestedBy, priority, dataSourceId])
+}
+
+enum DataSourceType {
+  MES
+  MANUAL
+  PROJECT
+}
+
+enum DataSourceFrequency {
+  REAL
+  PERIODIC
+  MANUAL
+}
+
+enum DataSourceStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum RawDataPriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum RawDataStatus {
+  PENDING
+  PROCESSED
+  ERROR
 }

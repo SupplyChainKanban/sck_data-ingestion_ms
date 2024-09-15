@@ -13,9 +13,9 @@ export class DataSourceService extends PrismaClient implements OnModuleInit {
     this.logger.log('DataSource Database connected')
   }
 
-  create(createDataSourceDto: CreateDataSourceDto) {
+  async create(createDataSourceDto: CreateDataSourceDto) {
     try {
-      return this.dataSource.create({ data: createDataSourceDto });
+      return await this.dataSource.create({ data: createDataSourceDto });
     } catch (error) {
       this.handleExceptions(error);
     }
@@ -39,7 +39,7 @@ export class DataSourceService extends PrismaClient implements OnModuleInit {
     }
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     try {
       const dataSource = await this.dataSource.findFirst({
         where: { id: id, available: true }
@@ -57,16 +57,13 @@ export class DataSourceService extends PrismaClient implements OnModuleInit {
     }
   }
 
-  async update(id: number, updateDataSourceDto: UpdateDataSourceDto) {
-    //TODO: Falta colocar el dto para que se actualize
-    //? Aquí se colocará el id solo para que funcione el TCP
+  async update(id: string, updateDataSourceDto: UpdateDataSourceDto) {
     const { id: __, ...data } = updateDataSourceDto;
     await this.findOne(id);
 
     try {
       return this.dataSource.update({
         where: { id: id },
-        //? data: updateDataSourceDto,
         data: data,
       })
     } catch (error) {
@@ -74,7 +71,7 @@ export class DataSourceService extends PrismaClient implements OnModuleInit {
     }
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     await this.findOne(id);
     try {
       const dataSource = await this.dataSource.update({ where: { id }, data: { available: false } })
@@ -86,12 +83,12 @@ export class DataSourceService extends PrismaClient implements OnModuleInit {
   }
 
   private handleExceptions(error: any) {
-    switch (error.code) {
-      case '123123123123':
-        throw new RpcException({ status: HttpStatus.I_AM_A_TEAPOT, message: 'Error manejado' });
-      default:
-        this.logger.error(error);
-        throw new RpcException({ status: HttpStatus.BAD_REQUEST, message: error.message });
+    if (error.message.includes('Unique constraint failed')) {
+      this.logger.error('DB Unique constrain is not satisfied')
+      throw new RpcException({ status: HttpStatus.CONFLICT, message: 'Conflicto con los datos enviados. Ya hay una entrada similar' });
     }
+
+    this.logger.error(error);
+    throw new RpcException({ status: HttpStatus.BAD_REQUEST, message: error.message });
   }
 }

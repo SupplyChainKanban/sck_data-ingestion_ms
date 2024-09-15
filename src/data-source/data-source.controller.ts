@@ -1,4 +1,4 @@
-import { Controller, ParseIntPipe } from '@nestjs/common';
+import { Controller, ParseUUIDPipe } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { DataSourceService } from './data-source.service';
 import { CreateDataSourceDto } from './dto/create-data-source.dto';
@@ -20,7 +20,7 @@ export class DataSourceController {
   }
 
   @MessagePattern({ cmd: 'findOneDataSource' })
-  findOne(@Payload('id', ParseIntPipe) id: number) {
+  findOne(@Payload('id', ParseUUIDPipe) id: string) {
     return this.dataSourceService.findOne(id);
   }
 
@@ -30,7 +30,7 @@ export class DataSourceController {
   }
 
   @MessagePattern({ cmd: 'deleteDataSource' })
-  remove(@Payload('id', ParseIntPipe) id: number) {
+  remove(@Payload('id', ParseUUIDPipe) id: string) {
     return this.dataSourceService.remove(id);
   }
 }

@@ -8,28 +8,28 @@ import { UpdateRawDataDto, CreateRawDataDto } from './dto';
 export class RawDataController {
   constructor(private readonly rawDataService: RawDataService) { }
 
-  @MessagePattern({ cmd: 'createRawData' })
-  create(@Payload() createRawDataDto: CreateRawDataDto) {
-    return this.rawDataService.create(createRawDataDto);
-  }
+  // @MessagePattern({ cmd: 'createRawData' })
+  // create(@Payload() createRawDataDto: CreateRawDataDto) {
+  //   return this.rawDataService.create(createRawDataDto);
+  // }
 
-  @MessagePattern({ cmd: 'findAllRawData' })
-  findAll(@Payload() paginationDto: PaginationDto) {
-    return this.rawDataService.findAll(paginationDto);
-  }
+  // @MessagePattern({ cmd: 'findAllRawData' })
+  // findAll(@Payload() paginationDto: PaginationDto) {
+  //   return this.rawDataService.findAll(paginationDto);
+  // }
 
-  @MessagePattern({ cmd: 'findOneRawData' })
-  findOne(@Payload('id', ParseIntPipe) id: number) {
-    return this.rawDataService.findOne(id);
-  }
+  // @MessagePattern({ cmd: 'findOneRawData' })
+  // findOne(@Payload('id', ParseIntPipe) id: number) {
+  //   return this.rawDataService.findOne(id);
+  // }
 
-  @MessagePattern({ cmd: 'updateRawData' })
-  update(@Payload() updateRawDataDto: UpdateRawDataDto) {
-    return this.rawDataService.update(updateRawDataDto.id, updateRawDataDto);
-  }
+  // @MessagePattern({ cmd: 'updateRawData' })
+  // update(@Payload() updateRawDataDto: UpdateRawDataDto) {
+  //   return this.rawDataService.update(updateRawDataDto.id, updateRawDataDto);
+  // }
 
-  @MessagePattern({ cmd: 'deleteRawData' })
-  remove(@Payload('id', ParseIntPipe) id: number) {
-    return this.rawDataService.remove(id);
-  }
+  // @MessagePattern({ cmd: 'deleteRawData' })
+  // remove(@Payload('id', ParseIntPipe) id: number) {
+  //   return this.rawDataService.remove(id);
+  // }
 }

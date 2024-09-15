@@ -67,13 +67,19 @@ $ npm run test:cov
   npx prisma migrate dev
 ```
 
-5. Levantar el servidor de NATS
+5. Levantar docker
+
+```
+  docker compose up -d
+```
+
+6. Levantar el servidor de NATS
 
 ```
   docker run -d --name nats-main -p 4222:4222 -p 8222:8222 nats
 ```
 
-6. Ejecutar
+7. Ejecutar
 
 ```
   npm run start:dev
