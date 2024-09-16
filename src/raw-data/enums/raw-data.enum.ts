@@ -8,6 +8,6 @@ export const rawPriorityList = [
 
 export const rawStatusList = [
     RawDataStatus.PENDING,
-    RawDataStatus.PROCESSED,
+    RawDataStatus.VALIDATED,
     RawDataStatus.ERROR,
 ]

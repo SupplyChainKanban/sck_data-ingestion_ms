@@ -17,7 +17,13 @@ export class RawDataService extends PrismaClient implements OnModuleInit {
 
   async create(createRawDataDto: CreateRawDataDto) {
     try {
-      return await this.rawData.create({ data: createRawDataDto })
+      const rawData = await this.rawData.create({ data: createRawDataDto });
+
+      //TODO: Colocar el envío de la solicitud para validar la información
+
+      //TODO: Colocar la actualización del estado del rawData creado
+
+      return rawData
     } catch (error) {
       handleExceptions(error, this.logger)
     }

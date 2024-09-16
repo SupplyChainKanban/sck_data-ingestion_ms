@@ -69,6 +69,6 @@ enum RawDataPriority {
 
 enum RawDataStatus {
   PENDING
-  PROCESSED
+  VALIDATED
   ERROR
 }
