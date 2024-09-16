@@ -1,10 +1,10 @@
 import { HttpStatus, Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { PrismaClient } from '@prisma/client';
-import { CreateRawDataDto, UpdateRawDataDto } from './dto';
-import { PaginationDto } from 'src/common';
+import { delay, PaginationDto } from 'src/common';
 import { handleExceptions } from 'src/common/helpers/exceptions';
 import { SCK_NATS_SERVICE } from 'src/config';
+import { ChangeRawDataStatusDto, CreateRawDataDto, UpdateRawDataDto } from './dto';
 
 @Injectable()
 export class RawDataService extends PrismaClient implements OnModuleInit {
@@ -33,12 +33,12 @@ export class RawDataService extends PrismaClient implements OnModuleInit {
         priority: rawData.priority,
       }
       this.client.emit('validate.rawData', payload)
+
       return rawData
     } catch (error) {
       handleExceptions(error, this.logger)
     }
   }
-  //TODO: Colocar la actualización del estado del rawData creado
 
   async findAll(paginationDto: PaginationDto) {
     const { page, limit } = paginationDto;
@@ -129,6 +129,38 @@ export class RawDataService extends PrismaClient implements OnModuleInit {
       return rawData
     } catch (error) {
       handleExceptions(error, this.logger)
+    }
+  }
+
+  async updateStatus(changeRawDataStatusDto: ChangeRawDataStatusDto) {
+    const { id, status } = changeRawDataStatusDto
+
+    try {
+      const rawData = await this.findOne(id);
+      if (rawData.status === status) return rawData;
+
+      return this.rawData.update({
+        where: { id },
+        data: { status: status },
+        omit: {
+          lastAccessed: true,
+          createAt: true,
+          updatedAt: true,
+          dataSourceId: true,
+          available: true,
+        },
+        include: {
+          dataSource: {
+            select: {
+              name: true,
+              description: true,
+              sourceType: true,
+            }
+          }
+        }
+      })
+    } catch (error) {
+      handleExceptions(error, this.logger);
     }
   }
 }

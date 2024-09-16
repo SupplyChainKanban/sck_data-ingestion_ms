@@ -1,8 +1,9 @@
 import { Controller, ParseUUIDPipe } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
 import { RawDataService } from './raw-data.service';
 import { PaginationDto } from 'src/common';
 import { UpdateRawDataDto, CreateRawDataDto } from './dto';
+import { ChangeRawDataStatusDto } from './dto/change-raw-data-status.dto';
 
 @Controller()
 export class RawDataController {
@@ -32,4 +33,11 @@ export class RawDataController {
   remove(@Payload('id', ParseUUIDPipe) id: string) {
     return this.rawDataService.remove(id);
   }
+
+  @EventPattern('update.rawData.status')
+  @MessagePattern('update.rawData.status')
+  updateStatus(@Payload() changeRawDataStatusDto: ChangeRawDataStatusDto) {
+    return this.rawDataService.updateStatus(changeRawDataStatusDto);
+  }
+
 }
