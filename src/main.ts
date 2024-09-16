@@ -12,7 +12,7 @@ async function main() {
     {
       transport: Transport.NATS,
       options: {
-        servers: envs.natsServers,
+        servers: envs.sckNatsServers,
       }
     }
   );

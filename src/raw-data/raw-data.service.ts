@@ -1,14 +1,21 @@
-import { HttpStatus, Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { RpcException } from '@nestjs/microservices';
+import { HttpStatus, Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { PrismaClient } from '@prisma/client';
 import { CreateRawDataDto, UpdateRawDataDto } from './dto';
 import { PaginationDto } from 'src/common';
 import { handleExceptions } from 'src/common/helpers/exceptions';
+import { SCK_NATS_SERVICE } from 'src/config';
 
 @Injectable()
 export class RawDataService extends PrismaClient implements OnModuleInit {
 
   private readonly logger = new Logger('RawDataService');
+
+  constructor(
+    @Inject(SCK_NATS_SERVICE) private readonly client: ClientProxy
+  ) {
+    super()
+  }
 
   onModuleInit() {
     this.$connect();
@@ -19,15 +26,19 @@ export class RawDataService extends PrismaClient implements OnModuleInit {
     try {
       const rawData = await this.rawData.create({ data: createRawDataDto });
 
-      //TODO: Colocar el envío de la solicitud para validar la información
-
-      //TODO: Colocar la actualización del estado del rawData creado
-
+      const payload = {
+        rawDataId: rawData.id,
+        sourceId: rawData.dataSourceId,
+        dataPayload: rawData.dataPayload,
+        priority: rawData.priority,
+      }
+      this.client.emit('validate.rawData', payload)
       return rawData
     } catch (error) {
       handleExceptions(error, this.logger)
     }
   }
+  //TODO: Colocar la actualización del estado del rawData creado
 
   async findAll(paginationDto: PaginationDto) {
     const { page, limit } = paginationDto;
