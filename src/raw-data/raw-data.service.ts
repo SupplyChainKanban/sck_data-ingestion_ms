@@ -1,10 +1,11 @@
 import { HttpStatus, Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, RawDataPriority } from '@prisma/client';
 import { delay, PaginationDto } from 'src/common';
 import { handleExceptions } from 'src/common/helpers/exceptions';
 import { SCK_NATS_SERVICE } from 'src/config';
 import { ChangeRawDataStatusDto, CreateRawDataDto, UpdateRawDataDto } from './dto';
+import { seedData } from 'src/common/data/seed';
 
 @Injectable()
 export class RawDataService extends PrismaClient implements OnModuleInit {
@@ -38,6 +39,31 @@ export class RawDataService extends PrismaClient implements OnModuleInit {
     } catch (error) {
       handleExceptions(error, this.logger)
     }
+  }
+
+  async runSeed() {
+    //TODO: Realizar el seed
+    console.log("Entré el seed")
+    const rawDataFromSeed = seedData.map((seed) => {
+      const rawData: CreateRawDataDto = {
+        dataSchemaVersion: seed.dataSchemaVersion,
+        dataSourceId: seed.dataSourceId,
+        ingestedBy: seed.ingestedBy,
+        dataPayload: seed.dataPayload,
+        priority: RawDataPriority[seed.priority]
+      }
+      return rawData;
+    })
+    for (const rawData of rawDataFromSeed) {
+
+      // console.log(rawData.dataPayload)
+      await this.create(rawData);
+      await delay(1000)
+    }
+    // console.log({ rawDataFromSeed })
+
+
+
   }
 
   async findAll(paginationDto: PaginationDto) {

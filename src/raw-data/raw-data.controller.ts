@@ -16,6 +16,7 @@ export class RawDataController {
 
   @MessagePattern({ cmd: 'findAllRawData' })
   findAll(@Payload() paginationDto: PaginationDto) {
+    console.log("Entré")
     return this.rawDataService.findAll(paginationDto);
   }
 
@@ -38,6 +39,12 @@ export class RawDataController {
   @MessagePattern('update.rawData.status')
   updateStatus(@Payload() changeRawDataStatusDto: ChangeRawDataStatusDto) {
     return this.rawDataService.updateStatus(changeRawDataStatusDto);
+  }
+
+  @EventPattern('rawData.seed')
+  @MessagePattern('rawData.seed')
+  runSeed(@Payload() payload: {}) {
+    return this.rawDataService.runSeed();
   }
 
 }
