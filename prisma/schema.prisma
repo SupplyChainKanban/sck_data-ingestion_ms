@@ -41,7 +41,6 @@ model RawData {
   dataSourceId      String
 
   @@index([available])
-  // @@unique([dataSchemaVersion, dataPayload, ingestedBy, priority, dataSourceId])
 }
 
 enum DataSourceType {

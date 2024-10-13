@@ -22,41 +22,17 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Project setup
+# Microservicios de ingesta de datos
 
-```bash
-$ npm install
-```
+Este microservicio recibirá todos los datos que vengan del gateway y los registrará para pasarlo al microservicio de validación.
 
-## Compile and run the project
+## Flujo de datos
 
-```bash
-# development
-$ npm run start
+![](/diagrams/Ms_ingestion.drawio.png)
 
-# watch mode
-$ npm run start:dev
+## Despliegue
 
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-# Data Ingest Microservice
-
-## Dev
+### Ambiente de desarrollo
 
 1. Clonar el repositorio
 2. Instalar dependencias

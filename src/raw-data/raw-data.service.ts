@@ -42,7 +42,6 @@ export class RawDataService extends PrismaClient implements OnModuleInit {
   }
 
   async runSeed() {
-    //TODO: Realizar el seed
     console.log("Entré el seed")
     const rawDataFromSeed = seedData.map((seed) => {
       const rawData: CreateRawDataDto = {
@@ -56,13 +55,9 @@ export class RawDataService extends PrismaClient implements OnModuleInit {
     })
     for (const rawData of rawDataFromSeed) {
 
-      // console.log(rawData.dataPayload)
       await this.create(rawData);
       await delay(1000)
     }
-    // console.log({ rawDataFromSeed })
-
-
 
   }
 
