@@ -16,7 +16,6 @@ export class RawDataController {
 
   @MessagePattern({ cmd: 'findAllRawData' })
   findAll(@Payload() paginationDto: PaginationDto) {
-    console.log("Entré")
     return this.rawDataService.findAll(paginationDto);
   }
 

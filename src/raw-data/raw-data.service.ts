@@ -1,4 +1,4 @@
-import { HttpStatus, Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { PrismaClient, RawDataPriority } from '@prisma/client';
 import { delay, PaginationDto } from 'src/common';
@@ -10,7 +10,7 @@ import { seedData } from 'src/common/data/seed';
 @Injectable()
 export class RawDataService extends PrismaClient implements OnModuleInit {
 
-  private readonly logger = new Logger('RawDataService');
+  private readonly logger = new Logger(`DataIngestionMS - ${RawDataService.name}`);
 
   constructor(
     @Inject(SCK_NATS_SERVICE) private readonly client: ClientProxy
@@ -42,7 +42,6 @@ export class RawDataService extends PrismaClient implements OnModuleInit {
   }
 
   async runSeed() {
-    console.log("Entré el seed")
     const rawDataFromSeed = seedData.map((seed) => {
       const rawData: CreateRawDataDto = {
         dataSchemaVersion: seed.dataSchemaVersion,
@@ -119,7 +118,7 @@ export class RawDataService extends PrismaClient implements OnModuleInit {
         }
       )
       if (!rawData) {
-        throw new RpcException({ message: `Raw Data with id ${id} not found`, status: HttpStatus.BAD_REQUEST })
+        throw new RpcException({ message: `Raw Data with id ${id} not found` })
       }
 
       return rawData;
